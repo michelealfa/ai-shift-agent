@@ -14,7 +14,7 @@ services:
           property: connectionString
       - key: REDIS_URL
         fromService:
-          type: redis
+          type: keyvalue
           name: shift-agent-redis
           property: connectionString
       - fromGroup: shift-agent-secrets
@@ -33,23 +33,23 @@ services:
           property: connectionString
       - key: REDIS_URL
         fromService:
-          type: redis
+          type: keyvalue
           name: shift-agent-redis
           property: connectionString
       - fromGroup: shift-agent-secrets
 
-# 3. Managed Databases
+  # 3. Redis (KeyValue store)
+  - type: keyvalue
+    name: shift-agent-redis
+    region: frankfurt
+    plan: free
+    ipAllowList: [] # Solo accesso interno
+
+# 4. Managed Database
 databases:
   - name: shift-agent-db
     region: frankfurt
     plan: free
-
-# 4. Managed Redis
-redis:
-  - name: shift-agent-redis
-    region: frankfurt
-    plan: free
-    ipAllowList: [] # Solo accesso interno
 
 # 5. Shared Secrets Group
 envVarGroups:
