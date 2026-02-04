@@ -29,21 +29,41 @@ class RedisCache:
                 settings.REDIS_URL,
                 decode_responses=True,
                 socket_connect_timeout=5,
-                socket_timeout=5
+                socket_timeout=5,
+                ssl_cert_reqs=None # Common requirement for Render/Heroku SSL
             )
             
             # Cache database (separate from Celery)
-            cache_url = settings.REDIS_URL.rsplit('/', 1)[0] + f"/{settings.REDIS_CACHE_DB}"
+            # Use the 'db' parameter instead of string manipulation
             self.cache_db = redis.from_url(
-                cache_url,
+                settings.REDIS_URL,
+                db=settings.REDIS_CACHE_DB,
                 decode_responses=True,
                 socket_connect_timeout=5,
-                socket_timeout=5
+                socket_timeout=5,
+                ssl_cert_reqs=None
             )
             
             # Test connection
-            self.client.ping()
-            self.cache_db.ping()
+            try:
+                self.client.ping()
+                self.cache_db.ping()
+            except redis.exceptions.ResponseError as re:
+                if "DB index is out of range" in str(re):
+                    logger.warning(f"DB {settings.REDIS_CACHE_DB} not available. Falling back to DB 0.")
+                    self.cache_db = self.client
+                else:
+                    raise
+            except Exception:
+                # If connecting with SSL fails, try without (some internal Render URLs might be plain)
+                if settings.REDIS_URL.startswith("rediss://"):
+                     logger.warning("SSL connection failed, retrying without SSL...")
+                     plain_url = settings.REDIS_URL.replace("rediss://", "redis://")
+                     self.client = redis.from_url(plain_url, decode_responses=True)
+                     self.cache_db = redis.from_url(plain_url, db=settings.REDIS_CACHE_DB, decode_responses=True)
+                     self.client.ping()
+                else:
+                    raise
             
             self._initialized = True
             logger.info("Redis cache initialized successfully")

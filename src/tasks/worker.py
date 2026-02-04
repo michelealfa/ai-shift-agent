@@ -11,10 +11,24 @@ from ..storage.sheets_client import SheetsClient
 
 logger = logging.getLogger(__name__)
 
+import ssl
+
+# SSL configuration for Celery if using rediss://
+ssl_conf = None
+if settings.REDIS_URL.startswith("rediss://"):
+    ssl_conf = {'ssl_cert_reqs': ssl.CERT_NONE}
+
 celery_app = Celery(
     'shift_agent_tasks',
     broker=settings.REDIS_URL,
     backend=settings.REDIS_URL
+)
+
+celery_app.conf.update(
+    broker_use_ssl=ssl_conf,
+    redis_backend_use_ssl=ssl_conf,
+    # Additional production settings
+    broker_connection_retry_on_startup=True
 )
 
 # Client instances are now created dynamically within tasks to support multi-tenancy
