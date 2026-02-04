@@ -1,9 +1,0 @@
-{
-    "TARGET_USER_NAME": "ALESSANDRA RE",
-    "GEMINI_API_KEY": "AIzaSyAnS10gPMBpDnZhB1kzSqUp1CNLpwSQOJQ",
-    "VISION_MODEL": "gemini-2.5-flash",
-    "NLP_MODEL": "gemini-2.5-flash",
-    "GOOGLE_MAPS_API_KEY": "your_google_maps_api_key_here",
-    "SPREADSHEET_ID": "your_spreadsheet_id_here",
-    "X_API_KEY": "your_static_api_key_here"
-}
