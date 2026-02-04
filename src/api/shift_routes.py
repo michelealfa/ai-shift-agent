@@ -15,7 +15,9 @@ router = APIRouter(prefix="/api/shifts", tags=["shifts"])
 
 from ..storage.user_storage import get_user_by_key
 
-UPLOAD_DIR = "temp/uploads"
+# Ensure upload directory exists with absolute path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+UPLOAD_DIR = os.path.join(BASE_DIR, "temp", "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # Security Dependency - Dynamic User Mapping
@@ -43,6 +45,7 @@ async def upload_shift_image(
     file_path = os.path.join(UPLOAD_DIR, f"{file_id}{file_extension}")
     
     try:
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
         with open(file_path, "wb") as f:
             content = await file.read()
             f.write(content)
