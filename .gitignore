@@ -12,3 +12,9 @@ temp/
 backups/
 .DS_Store
 .vscode/
+config/dynamic_settings.json
+*.json
+!render.yaml
+!package.json
+!composer.json
+!src/admin/templates/*.json

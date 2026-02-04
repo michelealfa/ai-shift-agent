@@ -2,7 +2,7 @@ from google import genai
 import sys
 
 try:
-    client = genai.Client(api_key='AIzaSyAnS10gPMBpDnZhB1kzSqUp1CNLpwSQOJQ')
+    client = genai.Client(api_key='YOUR_NEW_GEMINI_API_KEY_HERE')
     print("--- FULL MODEL LIST ---")
     models = list(client.models.list())
     all_names = [m.name for m in models]
