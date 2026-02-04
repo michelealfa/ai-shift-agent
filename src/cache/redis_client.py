@@ -24,24 +24,24 @@ class RedisCache:
             return
         
         try:
+            # Common arguments for all connections
+            common_kwargs = {
+                "decode_responses": True,
+                "socket_connect_timeout": 10,
+                "socket_timeout": 10
+            }
+            
+            # Only add SSL arguments if the URL scheme is rediss://
+            if settings.REDIS_URL.startswith("rediss://"):
+                common_kwargs["ssl_cert_reqs"] = "none"
+            
             # Main Redis client (for Celery)
-            self.client = redis.from_url(
-                settings.REDIS_URL,
-                decode_responses=True,
-                socket_connect_timeout=10,
-                socket_timeout=10,
-                ssl_cert_reqs='none' # Robust for Render
-            )
+            self.client = redis.from_url(settings.REDIS_URL, **common_kwargs)
             
             # Cache database
-            self.cache_db = redis.from_url(
-                settings.REDIS_URL,
-                db=settings.REDIS_CACHE_DB,
-                decode_responses=True,
-                socket_connect_timeout=10,
-                socket_timeout=10,
-                ssl_cert_reqs='none'
-            )
+            cache_kwargs = common_kwargs.copy()
+            cache_kwargs["db"] = settings.REDIS_CACHE_DB
+            self.cache_db = redis.from_url(settings.REDIS_URL, **cache_kwargs)
             
             # Test connection
             try:
