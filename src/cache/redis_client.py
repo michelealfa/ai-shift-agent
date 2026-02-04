@@ -28,20 +28,19 @@ class RedisCache:
             self.client = redis.from_url(
                 settings.REDIS_URL,
                 decode_responses=True,
-                socket_connect_timeout=5,
-                socket_timeout=5,
-                ssl_cert_reqs=None # Common requirement for Render/Heroku SSL
+                socket_connect_timeout=10,
+                socket_timeout=10,
+                ssl_cert_reqs='none' # Robust for Render
             )
             
-            # Cache database (separate from Celery)
-            # Use the 'db' parameter instead of string manipulation
+            # Cache database
             self.cache_db = redis.from_url(
                 settings.REDIS_URL,
                 db=settings.REDIS_CACHE_DB,
                 decode_responses=True,
-                socket_connect_timeout=5,
-                socket_timeout=5,
-                ssl_cert_reqs=None
+                socket_connect_timeout=10,
+                socket_timeout=10,
+                ssl_cert_reqs='none'
             )
             
             # Test connection
@@ -54,10 +53,10 @@ class RedisCache:
                     self.cache_db = self.client
                 else:
                     raise
-            except Exception:
-                # If connecting with SSL fails, try without (some internal Render URLs might be plain)
+            except Exception as e:
+                # If connecting with SSL fails, try without
                 if settings.REDIS_URL.startswith("rediss://"):
-                     logger.warning("SSL connection failed, retrying without SSL...")
+                     logger.warning(f"SSL ping failed ({e}), retrying without SSL...")
                      plain_url = settings.REDIS_URL.replace("rediss://", "redis://")
                      self.client = redis.from_url(plain_url, decode_responses=True)
                      self.cache_db = redis.from_url(plain_url, db=settings.REDIS_CACHE_DB, decode_responses=True)

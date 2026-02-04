@@ -35,6 +35,10 @@ class DatabaseManager:
                 logger.warning("DATABASE_URL not set, database features disabled")
                 return
             
+            # Render/Heroku fix: replace postgres:// with postgresql://
+            if database_url.startswith("postgres://"):
+                database_url = database_url.replace("postgres://", "postgresql://", 1)
+            
             # Create engine with connection pooling
             self.engine = create_engine(
                 database_url,

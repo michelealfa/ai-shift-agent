@@ -1,12 +1,12 @@
 services:
-  # 1. API Web Service
+  # 1. Unified App (API + Worker) - Fits in Free Tier
   - type: web
-    name: shift-agent-api
+    name: shift-agent-app
+    region: frankfurt
+    plan: free
     env: docker
     dockerContext: .
-    dockerfilePath: docker/Dockerfile.api
-    plan: free # Cambia in 'starter' se necessario
-    region: frankfurt
+    dockerfilePath: docker/Dockerfile.combined
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -19,39 +19,19 @@ services:
           property: connectionString
       - fromGroup: shift-agent-secrets
 
-  # 2. Celery Worker (Background Worker)
-  - type: worker
-    name: shift-agent-worker
-    env: docker
-    dockerContext: .
-    dockerfilePath: docker/Dockerfile.worker
-    region: frankfurt
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: shift-agent-db
-          property: connectionString
-      - key: REDIS_URL
-        fromService:
-          type: keyvalue
-          name: shift-agent-redis
-          property: connectionString
-      - fromGroup: shift-agent-secrets
-
-  # 3. Redis (KeyValue store)
+  # 2. Redis (KeyValue store)
   - type: keyvalue
     name: shift-agent-redis
     region: frankfurt
     plan: free
-    ipAllowList: [] # Solo accesso interno
 
-# 4. Managed Database
+# 3. Managed Database
 databases:
   - name: shift-agent-db
     region: frankfurt
     plan: free
 
-# 5. Shared Secrets Group
+# 4. Shared Secrets Group
 envVarGroups:
   - name: shift-agent-secrets
     envVars:
