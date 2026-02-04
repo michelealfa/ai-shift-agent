@@ -24,6 +24,7 @@ services:
     name: shift-agent-redis
     region: frankfurt
     plan: free
+    ipAllowList: [] # Internal access only
 
 # 3. Managed Database
 databases:
