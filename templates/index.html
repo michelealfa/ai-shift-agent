@@ -991,25 +991,20 @@
                 avatarImg.classList.remove('hidden');
             }
 
-            // Always show dashboard, even without shifts
-            dashboardView.classList.remove('hidden');
-
             // Try to load shifts
             const hasShifts = await loadDashboard();
 
-            // Initialize GPS regardless of shifts
-            tryGPS(true);
-
-            // If no shifts, show a message in the carousel
+            // Force Welcome View (Upload) if no shifts are found
             if (!hasShifts) {
-                const carousel = document.getElementById('shifts-carousel');
-                carousel.innerHTML = `
-                    <div style="padding: 2rem; text-align: center; opacity: 0.7; width: 100%;">
-                        <p style="font-size: 1.1rem; margin-bottom: 1rem;">📅 Nessun turno caricato</p>
-                        <p style="font-size: 0.9rem; color: var(--text-muted);">Carica una foto dei tuoi turni per iniziare</p>
-                    </div>
-                `;
+                dashboardView.classList.add('hidden');
+                welcomeView.classList.remove('hidden');
+                return;
             }
+
+            // If shifts exist, show dashboard and init GPS
+            dashboardView.classList.remove('hidden');
+            welcomeView.classList.add('hidden');
+            tryGPS(true);
         }
 
         function tryGPS(isInitial = false) {

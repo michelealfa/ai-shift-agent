@@ -58,6 +58,20 @@ async def process_image_logic(image_path: str, chat_id: int, target_user: str, w
     target_user = target_user or settings.TARGET_USER_NAME
     settings.load_dynamic_settings()
     logger.info(f"Target User for extraction: {target_user}")
+    
+    # Diagnostica per File Not Found
+    if not os.path.exists(image_path):
+        parent_dir = os.path.dirname(image_path)
+        logger.error(f"❌ FILE NON TROVATO: {image_path}")
+        if os.path.exists(parent_dir):
+            try:
+                files = os.listdir(parent_dir)
+                logger.info(f"Contenuto cartella {parent_dir}: {files}")
+            except Exception as e:
+                logger.error(f"Impossibile listare cartella: {e}")
+        else:
+            logger.error(f"La cartella genitore NON ESISTE: {parent_dir}")
+            
     try:
         # 1. Vision OCR con Gemini
         prompt = ShiftLogic.get_vision_prompt(target_user)
