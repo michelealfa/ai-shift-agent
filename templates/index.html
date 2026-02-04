@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0b0f1a">
+    <title>AI Shift Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #818cf8;
+            --primary-dark: #6366f1;
+            --bg: #0b0f1a;
+            --card-bg: rgba(30, 41, 59, 0.6);
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-gradient: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+            --safe-top: env(safe-area-inset-top);
+            --highlight: #facc15;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            background-attachment: fixed;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.15) 0%, transparent 20%),
+                var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: calc(var(--safe-top) + 1.5rem) 1rem 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .header-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            object-fit: cover;
+        }
+
+        header .title-group h1 {
+            margin: 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header .title-group p {
+            margin: 0.2rem 0 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .refresh-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 0.6rem;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-size: 1.2rem;
+            width: 44px;
+            height: 44px;
+        }
+
+        .refresh-btn:active {
+            transform: rotate(180deg);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .mini-upload-btn {
+            background: var(--accent-gradient);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border: none;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+            cursor: pointer;
+        }
+
+        /* Welcome Screen */
+        #welcome-view {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            text-align: center;
+            gap: 2rem;
+        }
+
+        .welcome-icon {
+            font-size: 5.5rem;
+            filter: drop-shadow(0 0 20px var(--primary));
+        }
+
+        .welcome-text h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .welcome-text p {
+            color: var(--text-muted);
+            margin: 0.8rem 0 0;
+            font-size: 1.05rem;
+            line-height: 1.4;
+        }
+
+        /* Traffic Widget */
+        .traffic-widget {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .traffic-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .traffic-data .time {
+            font-size: 2.22rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .traffic-data .label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 0.4rem;
+        }
+
+        .traffic-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-waze {
+            background: #33ccff;
+            color: #000;
+        }
+
+        .btn-maps {
+            background: #fff;
+            color: #000;
+        }
+
+        .origin-toggle {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px;
+            border-radius: 14px;
+        }
+
+        .origin-toggle button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .origin-toggle button.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Shift Carousel */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 0.5rem;
+        }
+
+        .section-header span {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        .sync-badge {
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            border: 1px solid currentColor;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        .carousel-view {
+            width: 100%;
+            overflow-x: auto;
+            padding: 0.5rem 0.2rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) transparent;
+        }
+
+        .carousel-view::-webkit-scrollbar {
+            height: 4px;
+            display: block;
+        }
+
+        .carousel-view::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .carousel-container {
+            display: flex;
+            gap: 1.2rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .shift-card.active-week {
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .shift-card {
+            min-width: 180px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.2rem;
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .shift-card.current-day {
+            border: 2px solid var(--highlight);
+            background: rgba(250, 204, 21, 0.05);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.15);
+        }
+
+        .shift-card.current-day::after {
+            content: 'OGGI';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--highlight);
+            color: #000;
+            font-size: 0.6rem;
+            font-weight: 900;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .shift-card .edit-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.4;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .shift-card .day {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .shift-card .date {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .shift-card .slot {
+            font-size: 0.85rem;
+            color: var(--primary);
+            background: rgba(129, 140, 248, 0.12);
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 0.3rem;
+            border: 1px solid rgba(129, 140, 248, 0.1);
+        }
+
+        /* Actions */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        .action-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            aspect-ratio: 1.2;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-card:active {
+            transform: scale(0.94);
+        }
+
+        .action-card .icon-blob {
+            width: 56px;
+            height: 56px;
+            background: rgba(99, 102, 241, 0.15);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+        }
+
+        .action-card p {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        /* Overlays */
+        #chat-widget,
+        #review-view {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg);
+            padding: calc(var(--safe-top) + 1.5rem) 1.5rem 1.5rem;
+        }
+
+        .overlay-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .overlay-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 2.2rem;
+            cursor: pointer;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            padding: 0.5rem;
+        }
+
+        .message {
+            max-width: 88%;
+            padding: 1.1rem;
+            border-radius: 1.4rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--accent-gradient);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.07);
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .chat-footer {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            padding: 0.8rem 1.2rem;
+            border-radius: 1.2rem;
+            color: white;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        .chat-footer button {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border: none;
+            border-radius: 1.2rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .week-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .week-nav button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .form-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .form-row {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* User Selector */
+        #user-selector-view {
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .user-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .user-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .user-card:active {
+            transform: scale(0.95);
+        }
+
+        .user-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            padding: 2px;
+        }
+
+        .user-card span {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .form-field {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .form-field label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .form-field input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-family: inherit;
+            width: 65%;
+            text-align: right;
+        }
+
+        .btn {
+            border: none;
+            padding: 1.2rem;
+            border-radius: 1.4rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            text-align: center;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.25);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        #status-bar {
+            position: fixed;
+            bottom: 2rem;
+            left: 1.5rem;
+            right: 1.5rem;
+            padding: 1.1rem;
+            border-radius: 1.5rem;
+            background: var(--primary-dark);
+            color: white;
+            text-align: center;
+            z-index: 3000;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #fff;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            animation: rot 1s linear infinite;
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+
+        @keyframes rot {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Media Queries for Mobile */
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+                gap: 0.5rem;
+            }
+
+            .header-avatar {
+                width: 38px;
+                height: 38px;
+            }
+
+            header .title-group h1 {
+                font-size: 1.1rem;
+            }
+
+            #app-user-reference {
+                font-size: 0.75rem;
+            }
+
+            .status-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .shift-card {
+                min-width: 160px;
+                padding: 0.8rem;
+            }
+
+            .chat-widget {
+                width: calc(100% - 2rem);
+                right: 1rem;
+                bottom: 5rem;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- User Selector Overlay (Modal-like) -->
+    <div id="user-selector-view" class="hidden fade-in">
+        <h1
+            style="background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+            Chi sei?</h1>
+        <p style="color: var(--text-muted);">Seleziona il tuo profilo per accedere ai turni</p>
+        <div id="user-grid" class="user-grid">
+            <!-- Dinamico -->
+        </div>
+    </div>
+
+    <header class="fade-in">
+        <div class="user-profile" id="user-profile-header">
+            <img id="header-avatar" src="" alt="Avatar" class="header-avatar hidden">
+            <div class="title-group">
+                <h1 style="font-size: 1.4rem;">Shift Intelligence</h1>
+                <p id="app-user-reference">Caricamento...</p>
+            </div>
+        </div>
+        <div style="display: flex; gap: 0.8rem; align-items: center;">
+            <button class="mini-upload-btn" onclick="openCamera()" title="Scansiona Turni">+</button>
+            <button class="refresh-btn" onclick="logout()" title="Logout">🚪</button>
+        </div>
+    </header>
+
+    <!-- Welcome View -->
+    <div id="welcome-view" class="hidden fade-in">
+        <div class="welcome-icon">🔋</div>
+        <div class="welcome-text">
+            <h2>Pronto a iniziare?</h2>
+            <p>Carica una foto dei tuoi turni per attivare la dashboard intelligente.</p>
+        </div>
+        <button class="btn btn-primary" style="width: 100%;" onclick="openCamera()">Scansiona Turni</button>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="hidden fade-in"
+        style="flex: 1; display: flex; flex-direction: column; gap: 1.5rem;">
+
+        <!-- Traffic Widget -->
+        <section class="glass traffic-widget">
+            <div class="traffic-status">
+                <div class="traffic-data">
+                    <span class="time" id="traffic-time">-- min</span>
+                    <div class="label">
+                        <span id="traffic-indicator" class="traffic-indicator"></span>
+                        Traffico: <span id="traffic-label-text">Calcolo...</span>
+                    </div>
+                </div>
+                <div style="text-align: right; opacity: 0.5;">
+                    <span id="traffic-origin-label"
+                        style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Arese</span>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="#" id="waze-link" class="nav-btn btn-waze" target="_blank"><span>🚙</span> Waze</a>
+                <a href="#" id="maps-link" class="nav-btn btn-maps" target="_blank"><span>📍</span> Maps</a>
+            </div>
+            <div class="origin-toggle" id="origin-toggle">
+                <button data-origin="GPS" class="active">📍 GPS</button>
+                <button data-origin="Origgio">🏠 HOME</button>
+            </div>
+        </section>
+
+        <!-- Carousel -->
+        <section>
+            <div class="section-header">
+                <div class="week-nav">
+                    <span>I tuoi Turni</span>
+                    <button onclick="changeWeek(0)" title="Vai a Oggi">Oggi</button>
+                </div>
+                <span class="sync-badge" id="storage-status">Checking...</span>
+            </div>
+            <div class="carousel-view">
+                <div class="carousel-container" id="shifts-carousel">
+                    <!-- Dinamico -->
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Assistant Integrated -->
+        <section class="glass fade-in" style="flex: 1; display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                <span style="font-weight: 700; font-size: 0.9rem;">Assistant AI</span>
+                <span style="font-size: 0.7rem; color: var(--text-muted);">Llama 3.1 Mode</span>
+            </div>
+            <div id="dashboard-chat-messages" class="chat-messages" style="max-height: 200px; min-height: 100px;">
+                <div class="message bot" style="padding: 0.8rem; font-size: 0.85rem;">Ciao! Chiedimi pure dei tuoi turni
+                    o del traffico.</div>
+            </div>
+            <div class="chat-footer">
+                <input type="text" id="db-chat-input" placeholder="Com'è il traffico?">
+                <button id="db-chat-send">➤</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Chat Overlay -->
+    <div id="chat-widget" class="hidden fade-in">
+        <div class="overlay-header">
+            <h2>Shift Assistant AI</h2>
+            <button onclick="toggleChat()" class="close-btn">&times;</button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot">Ciao! Posso aiutarti con i tuoi turni o darti info sul traffico rilevato dal GPS.
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chat-input" placeholder="Lavoro questo weekend?">
+            <button id="chat-send">➤</button>
+        </div>
+    </div>
+
+    <!-- Review / Update Overlay -->
+    <div id="review-view" class="hidden fade-in">
+        <div class="overlay-header">
+            <h2 id="overlay-title">Verifica Turni</h2>
+            <button onclick="closeReview()" class="close-btn">&times;</button>
+        </div>
+        <div id="review-list" class="form-list">
+            <!-- Dinamico -->
+        </div>
+        <button class="btn btn-success" style="margin-top: 1.5rem;" id="submit-review">Conferma e Salva</button>
+    </div>
+
+    <input type="file" id="file-input" accept="image/*" capture="camera" class="hidden">
+    <div id="status-bar" class="hidden"><span class="loader"></span><span id="status-message">...</span></div>
+
+    <script>
+        let isEditMode = false;
+        let currentShifts = [];
+        let weekOffset = 0;
+        let authKey = "";
+        let targetUser = "UTENTE";
+
+        const headers = () => ({
+            'Content-Type': 'application/json',
+            'X-API-KEY': authKey
+        });
+
+        const userSelectorView = document.getElementById('user-selector-view');
+        const userGrid = document.getElementById('user-grid');
+        const dashboardView = document.getElementById('dashboard-view');
+        const welcomeView = document.getElementById('welcome-view');
+        const fileInput = document.getElementById('file-input');
+        const statusBar = document.getElementById('status-bar');
+        const chatWidget = document.getElementById('chat-widget');
+        const reviewView = document.getElementById('review-view');
+        const carousel = document.getElementById('shifts-carousel');
+        const trafficTime = document.getElementById('traffic-time');
+        const trafficLabel = document.getElementById('traffic-label-text');
+        const trafficDot = document.getElementById('traffic-indicator');
+
+        window.onload = async () => {
+            const savedKey = localStorage.getItem('auth_key');
+            const savedName = localStorage.getItem('user_name');
+            const savedId = localStorage.getItem('user_id');
+
+            // Always check if we have a valid user selection
+            if (savedKey && savedName && savedId) {
+                authKey = savedKey;
+                targetUser = savedName;
+
+                // Verify user still exists in database
+                try {
+                    const res = await fetch('/api/public/users');
+                    const users = await res.json();
+                    const userExists = users.some(u => u.id == savedId);
+
+                    if (userExists) {
+                        initDashboard();
+                    } else {
+                        // User no longer exists, clear and show selector
+                        localStorage.clear();
+                        showUserSelector();
+                    }
+                } catch (e) {
+                    console.error('Error verifying user:', e);
+                    showUserSelector();
+                }
+            } else {
+                // No user selected, show selector
+                showUserSelector();
+            }
+        };
+
+        async function showUserSelector() {
+            userSelectorView.classList.remove('hidden');
+            try {
+                const res = await fetch('/api/public/users');
+                const users = await res.json();
+
+                if (users.length === 0) {
+                    userGrid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                            <p style="color: var(--text-muted);">Nessun utente configurato.</p>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">Contatta l'amministratore.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                userGrid.innerHTML = users.map(u => `
+                    <div class="user-card" onclick="selectUser('${u.id}', '${u.name}', '${u.api_key}', '${u.avatar || u.avatar_url}')">
+                        <img src="${u.avatar || u.avatar_url}" alt="${u.name}">
+                        <span>${u.display_name}</span>
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error('Error loading users:', e);
+                alert("Errore caricamento utenti");
+            }
+        }
+
+        function selectUser(id, name, key, avatar) {
+            localStorage.setItem('auth_key', key);
+            localStorage.setItem('user_id', id);
+            localStorage.setItem('user_name', name);
+            localStorage.setItem('user_avatar', avatar || '');
+            location.reload();
+        }
+
+        function logout() {
+            if (confirm("Vuoi uscire?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        async function initDashboard() {
+            // Updated user display
+            const savedAvatar = localStorage.getItem('user_avatar');
+            if (savedAvatar) {
+                const avatarImg = document.getElementById('header-avatar');
+                avatarImg.src = savedAvatar;
+                avatarImg.classList.remove('hidden');
+            }
+
+            // Always show dashboard, even without shifts
+            dashboardView.classList.remove('hidden');
+
+            // Try to load shifts
+            const hasShifts = await loadDashboard();
+
+            // Initialize GPS regardless of shifts
+            tryGPS(true);
+
+            // If no shifts, show a message in the carousel
+            if (!hasShifts) {
+                const carousel = document.getElementById('shifts-carousel');
+                carousel.innerHTML = `
+                    <div style="padding: 2rem; text-align: center; opacity: 0.7; width: 100%;">
+                        <p style="font-size: 1.1rem; margin-bottom: 1rem;">📅 Nessun turno caricato</p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Carica una foto dei tuoi turni per iniziare</p>
+                    </div>
+                `;
+            }
+        }
+
+        function tryGPS(isInitial = false) {
+            if (navigator.geolocation) {
+                if (!isInitial) showStatus("Rilevamento posizione GPS...");
+                navigator.geolocation.getCurrentPosition(pos => {
+                    const coords = `${pos.coords.latitude},${pos.coords.longitude}`;
+                    if (!isInitial) hideStatus();
+                    updateTraffic(coords);
+                }, () => {
+                    if (!isInitial) { hideStatus(); alert("GPS non disponibile"); }
+                    updateTraffic('Origgio');
+                });
+            } else {
+                updateTraffic('Origgio');
+            }
+        }
+
+        async function loadDashboard() {
+            try {
+                const res = await fetch('/api/shifts/list', { headers: headers() });
+                const data = await res.json();
+
+                if (data.user) {
+                    targetUser = data.user;
+                    document.getElementById('app-user-reference').innerText = `${targetUser} | Shift Agent`;
+                }
+
+                const badge = document.getElementById('storage-status');
+                if (data.storage_status === 'database') {
+                    badge.innerText = `DB 🟢`;
+                    badge.style.color = "var(--success)";
+                } else if (data.storage_status === 'google_sheets') {
+                    badge.innerText = "Sync Cloud 🟡";
+                    badge.style.color = "var(--warning)";
+                } else {
+                    badge.innerText = "Sync Local 🟠";
+                    badge.style.color = "var(--warning)";
+                }
+
+                // Store all shifts and current week
+                if (data.turni && data.turni.length > 0) {
+                    currentShifts = data.turni;
+
+                    // Use current_week for initial display if available
+                    const shiftsToShow = data.current_week && data.current_week.length > 0
+                        ? data.current_week
+                        : data.turni;
+
+                    renderCarousel(data.turni, data.today);
+                    return true;
+                }
+                return false;
+            } catch (e) {
+                console.error(e);
+                return false;
+            }
+        }
+
+        function changeWeek(offset) {
+            // "Oggi" button always resets and scrolls
+            const todayCard = document.querySelector('.current-day');
+            if (todayCard) {
+                todayCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        }
+
+        function renderCarousel(turni, todayDate = null) {
+            const today = todayDate || new Date().toISOString().split('T')[0];
+            const carousel = document.getElementById('shifts-carousel');
+
+            // Calculate range: Monday of Previous Week to Sunday of Next Week (3 Weeks)
+            const now = new Date();
+            const dayOfWeek = now.getDay() || 7;
+            
+            const startOfRange = new Date(now);
+            startOfRange.setDate(now.getDate() - dayOfWeek + 1 - 7); // Monday of LAST week
+            startOfRange.setHours(0, 0, 0, 0);
+
+            const endOfRange = new Date(startOfRange);
+            endOfRange.setDate(startOfRange.getDate() + 20); // 21 days total (3 weeks)
+            endOfRange.setHours(23, 59, 59, 999);
+
+            // Filter shifts within these 3 weeks
+            const filtered = turni.filter(t => {
+                const d = new Date(t.data);
+                return d >= startOfRange && d <= endOfRange;
+            });
+
+            if (filtered.length === 0) {
+                carousel.innerHTML = '<div style="padding: 2rem; opacity: 0.5; width: 100%; text-align: center;">Nessun turno trovato nelle 3 settimane di riferimento.</div>';
+                return;
+            }
+
+            // Current Week range for highlighting
+            const currentWeekStart = new Date(now);
+            currentWeekStart.setDate(now.getDate() - dayOfWeek + 1);
+            currentWeekStart.setHours(0,0,0,0);
+            const currentWeekEnd = new Date(currentWeekStart);
+            currentWeekEnd.setDate(currentWeekStart.getDate() + 6);
+            currentWeekEnd.setHours(23,59,59,999);
+
+            carousel.innerHTML = filtered.map((t, i) => {
+                const isToday = t.data === today || t.is_today === true;
+                const d = new Date(t.data);
+                const isCurrentWeek = d >= currentWeekStart && d <= currentWeekEnd;
+                
+                return `
+                <div class="shift-card fade-in ${isToday ? 'current-day' : ''} ${isCurrentWeek ? 'active-week' : ''}" style="animation-delay: ${i * 0.05}s">
+                    <span class="edit-icon" onclick="openEdit(${turni.indexOf(t)})">✏️</span>
+                    <div class="day">${t.giorno || d.toLocaleDateString('it-IT', { weekday: 'long' })}</div>
+                    <div class="date">${t.data}</div>
+                    <div class="slots">
+                        <div class="slot">${t.slot_1 || 'Riposo'}</div>
+                        ${t.slot_2 ? `<div class="slot">${t.slot_2}</div>` : ''}
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            // Always auto-scroll to today on initial render
+            setTimeout(() => {
+                const todayCard = carousel.querySelector('.current-day');
+                if (todayCard) {
+                    todayCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }, 300);
+        }
+
+        // GEOLOCATION
+        document.getElementById('origin-toggle').onclick = (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                document.querySelectorAll('#origin-toggle button').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                const origin = e.target.dataset.origin;
+                if (origin === 'GPS') {
+                    tryGPS();
+                } else { updateTraffic(origin); }
+            }
+        };
+
+        async function updateTraffic(origin) {
+            trafficTime.style.opacity = '0.3';
+
+            // Sync UI toggle
+            const isGPS = origin.includes(',') || origin === 'GPS';
+            document.querySelectorAll('#origin-toggle button').forEach(b => {
+                const bOrigin = b.dataset.origin;
+                if ((bOrigin === 'GPS' && isGPS) || (bOrigin === 'Origgio' && origin === 'Origgio')) {
+                    b.classList.add('active');
+                } else {
+                    b.classList.remove('active');
+                }
+            });
+
+            // Build Deep Links
+            const dest = "Il Centro Arese";
+            const wazeUrl =
+                `https://waze.com/ul?q=${encodeURIComponent(dest)}&navigate=yes&from=${encodeURIComponent(origin)}`;
+            const mapsUrl =
+                `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(dest)}&travelmode=driving`;
+
+            document.getElementById('waze-link').href = wazeUrl;
+            document.getElementById('maps-link').href = mapsUrl;
+
+            try {
+                const res = await fetch(`/api/shifts/traffic?origin=${encodeURIComponent(origin)}`, { headers: headers() });
+                const data = await res.json();
+                trafficTime.style.opacity = '1';
+
+                if (data.error === "MAPS_KEY_INVALID") {
+                    trafficTime.innerText = "LINK!";
+                    trafficLabel.innerText = "Usa bottoni sopra";
+                    trafficDot.style.background = "var(--warning)";
+                    console.error("Google Maps Error:", data.details);
+                    return;
+                }
+
+                if (data.duration) {
+                    trafficTime.innerText = data.duration;
+                    trafficLabel.innerText = data.traffic_label;
+                    trafficDot.style.background = `var(--${data.traffic_state === 'red' ? 'danger' : data.traffic_state === 'yellow'
+                        ? 'warning' : 'success'})`;
+                }
+            } catch (e) { trafficTime.innerText = "--"; }
+        }
+
+        // EDITING
+        function openEdit(idx) {
+            isEditMode = true;
+            document.getElementById('overlay-title').innerText = "Modifica Turno";
+            const t = currentShifts[idx];
+            const list = document.getElementById('review-list');
+            list.innerHTML = renderFormRow(t);
+            reviewView.classList.remove('hidden');
+        }
+
+        function openReview(data) {
+            isEditMode = false;
+            document.getElementById('overlay-title').innerText = "Conferma Turni";
+            const list = document.getElementById('review-list');
+            list.innerHTML = (data.turni || []).map(t => renderFormRow(t)).join('');
+            reviewView.classList.remove('hidden');
+        }
+
+        function renderFormRow(t) {
+            return `
+        <div class="form-row fade-in">
+            <div class="form-field"><label>Data</label><input type="text" value="${t.data}"></div>
+            <div class="form-field"><label>Giorno</label><input type="text" value="${t.giorno}"></div>
+            <div class="form-field"><label>Orario</label><input type="text" value="${t.slot_1 || ''}"
+                    placeholder="es. 08:30-17:00"></div>
+            <div class="form-field"><label>Extra</label><input type="text" value="${t.slot_2 || ''}"></div>
+        </div>
+        `;
+        }
+
+        document.getElementById('submit-review').onclick = async () => {
+            const rows = document.querySelectorAll('.form-row');
+            showStatus("Salvataggio...");
+            try {
+                if (isEditMode) {
+                    const ins = rows[0].querySelectorAll('input');
+                    const turno = { data: ins[0].value, giorno: ins[1].value, slot_1: ins[2].value, slot_2: ins[3].value };
+                    await fetch('/api/shifts/update', { method: 'POST', headers: headers(), body: JSON.stringify({ turno }) });
+                } else {
+                    const turni = Array.from(rows).map(r => {
+                        const ins = r.querySelectorAll('input');
+                        return { data: ins[0].value, giorno: ins[1].value, slot_1: ins[2].value, slot_2: ins[3].value };
+                    });
+                    await fetch('/api/shifts/commit', { method: 'POST', headers: headers(), body: JSON.stringify({ turni }) });
+                }
+                location.reload();
+            } catch (e) { hideStatus(); alert("Errore salvataggio"); }
+        };
+
+        function closeReview() { reviewView.classList.add('hidden'); }
+        function showStatus(msg) {
+            document.getElementById('status-message').innerText = msg;
+            statusBar.classList.remove('hidden');
+        }
+        function hideStatus() { statusBar.classList.add('hidden'); }
+        function openCamera() { fileInput.click(); }
+        function toggleChat() { chatWidget.classList.toggle('hidden'); }
+
+        fileInput.onchange = async (e) => {
+            if (!e.target.files[0]) return;
+            showStatus("Analisi AI...");
+            const fd = new FormData();
+            fd.append('file', e.target.files[0]);
+
+            // X-API-KEY must be sent even with FormData. We don't use headers() because it sets Content-Type to JSON.
+            const res = await fetch('/api/shifts/upload', {
+                method: 'POST',
+                headers: { 'X-API-KEY': authKey },
+                body: fd
+            });
+            const data = await res.json();
+            if (data.task_id) {
+                pollStatus(data.task_id);
+            } else {
+                hideStatus();
+                alert("Errore upload: " + (data.detail || "Errore sconosciuto"));
+            }
+        };
+
+        async function pollStatus(tid) {
+            const intv = setInterval(async () => {
+                const res = await fetch(`/api/shifts/status/${tid}`, { headers: headers() });
+                const d = await res.json();
+                if (d.status === 'SUCCESS') {
+                    clearInterval(intv);
+                    hideStatus();
+                    openReview(d.result);
+                }
+                else if (d.status === 'FAILURE') {
+                    clearInterval(intv);
+                    hideStatus();
+                    alert("Errore AI: " + (d.error || "Errore sconosciuto"));
+                }
+            }, 3000);
+        }
+
+        document.getElementById('db-chat-send').onclick = async () => {
+            const input = document.getElementById('db-chat-input');
+            const msg = input.value.trim(); if (!msg) return;
+            const container = document.getElementById('dashboard-chat-messages');
+            container.innerHTML += `<div class="message user" style="font-size: 0.85rem; padding: 0.6rem 1rem;">${msg}</div>
+        `;
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            try {
+                const res = await fetch('/api/shifts/query', {
+                    method: 'POST',
+                    headers: headers(),
+                    body: JSON.stringify({ question: msg })
+                });
+                const d = await res.json();
+                container.innerHTML += `<div class="message bot" style="font-size: 0.85rem; padding: 0.6rem 1rem;">${d.response}
+        </div>`;
+            } catch (e) {
+                container.innerHTML += `<div class="message bot" style="color: var(--danger);">Errore AI. Controlla connessione.
+        </div>`;
+            }
+            container.scrollTop = container.scrollHeight;
+        };
+
+        // Suppress initial chat overlay for now as we have integrated it
+        function toggleChat() { chatWidget.classList.toggle('hidden'); }
+    </script>
+</body>
+
+</html>

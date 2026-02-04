@@ -1,0 +1,82 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: shift_agent_postgres
+    environment:
+      POSTGRES_DB: shift_agent
+      POSTGRES_USER: shift_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    # No ports exposed in production for security, accessible only via network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U shift_user -d shift_agent" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    networks:
+      - shift_agent_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: shift_agent_redis
+    command: redis-server --appendonly yes
+    # No ports exposed in production
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: always
+    networks:
+      - shift_agent_network
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    container_name: shift_agent_api
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    # In production, we don't mount the code as a volume
+    volumes:
+      - ./logs:/app/logs
+    restart: always
+    networks:
+      - shift_agent_network
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    container_name: shift_agent_worker
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
+    restart: always
+    networks:
+      - shift_agent_network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+
+networks:
+  shift_agent_network:
+    name: shift_agent_network

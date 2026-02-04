@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Shift Manager - Web Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        p.subtitle {
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed #334155;
+            padding: 3rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .upload-area input {
+            display: none;
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        button.btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button.btn:hover {
+            background: var(--primary-light);
+        }
+
+        button.btn:disabled {
+            background: #334155;
+            cursor: not-allowed;
+        }
+
+        /* Status Overlay */
+        #status-overlay {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Editable Grid */
+        #review-container {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: #0f172a;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            border: 1px solid #334155;
+            text-align: left;
+        }
+
+        th {
+            background: #1e293b;
+            color: var(--muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        td input {
+            background: transparent;
+            border: none;
+            color: white;
+            width: 100%;
+        }
+
+        td input:focus {
+            outline: 2px solid var(--primary);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card" id="main-card">
+            <h1>Shift Manager AI</h1>
+            <p class="subtitle">Carica la foto dei turni per iniziare</p>
+
+            <div class="form-group">
+                <label for="target_user">Nome Utente Target</label>
+                <input type="text" id="target_user" placeholder="Esempio: CARLO" value="CARLO">
+            </div>
+
+            <div class="upload-area" id="drop-zone">
+                <span class="icon">📁</span>
+                <p>Trascina l'immagine qui o clicca per caricare</p>
+                <input type="file" id="file-input" accept="image/*">
+            </div>
+
+            <button class="btn" id="upload-btn">Analizza Turni</button>
+
+            <div id="status-overlay">
+                <div class="spinner"></div>
+                <p id="status-text">Caricamento in corso...</p>
+            </div>
+        </div>
+
+        <div id="review-container">
+            <div class="card">
+                <h2>Revisione Dati</h2>
+                <p class="subtitle">Correggi eventuali errori prima di salvare su Google Sheets</p>
+                <table id="shifts-table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Giorno</th>
+                            <th>Slot 1</th>
+                            <th>Slot 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dinamico -->
+                    </tbody>
+                </table>
+                <button class="btn" id="save-btn" style="margin-top: 2rem; background: var(--success);">Conferma e
+                    Salva</button>
+                <button class="btn" id="cancel-btn"
+                    style="margin-top: 0.5rem; background: var(--danger);">Annulla</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const uploadBtn = document.getElementById('upload-btn');
+        const statusOverlay = document.getElementById('status-overlay');
+        const statusText = document.getElementById('status-text');
+        const mainCard = document.getElementById('main-card');
+        const reviewContainer = document.getElementById('review-container');
+        const shiftsTableBody = document.querySelector('#shifts-table tbody');
+
+        let currentTaskId = null;
+
+        dropZone.onclick = () => fileInput.click();
+
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('dragover'); };
+        dropZone.ondragleave = () => dropZone.classList.remove('dragover');
+        dropZone.ondrop = (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            fileInput.files = e.dataTransfer.files;
+        };
+
+        uploadBtn.onclick = async () => {
+            if (!fileInput.files[0]) return alert("Seleziona un file");
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('target_user', document.getElementById('target_user').value);
+
+            uploadBtn.disabled = true;
+            statusOverlay.style.display = 'block';
+            statusText.innerText = "Caricamento immagine...";
+
+            try {
+                const res = await fetch('/api/shifts/upload', { method: 'POST', body: formData });
+                const data = await res.json();
+                currentTaskId = data.task_id;
+                pollStatus();
+            } catch (e) {
+                alert("Errore caricamento");
+                uploadBtn.disabled = false;
+            }
+        };
+
+        async function pollStatus() {
+            if (!currentTaskId) return;
+            statusText.innerText = "L'AI sta analizzando i turni (Llama 3.2)...";
+
+            const interval = setInterval(async () => {
+                const res = await fetch(`/api/shifts/status/${currentTaskId}`);
+                const data = await res.json();
+
+                if (data.status === 'SUCCESS') {
+                    clearInterval(interval);
+                    if (data.result && data.result.error) {
+                        alert("Errore AI: " + data.result.error);
+                        reset();
+                    } else if (!data.result || !data.result.turni || data.result.turni.length === 0) {
+                        alert("Nessun turno trovato. Verifica il nome target e la qualità dell'immagine.");
+                        reset();
+                    } else {
+                        showReview(data.result);
+                    }
+                } else if (data.status === 'FAILURE') {
+                    clearInterval(interval);
+                    alert("Errore critico: " + (data.error || "Timeout o errore server"));
+                    reset();
+                }
+            }, 2000);
+        }
+
+        function showReview(data) {
+            statusOverlay.style.display = 'none';
+            mainCard.style.display = 'none';
+            reviewContainer.style.display = 'block';
+
+            shiftsTableBody.innerHTML = '';
+            (data.turni || []).forEach((turno, idx) => {
+                const row = `<tr>
+                    <td><input type="text" value="${turno.data}" data-idx="${idx}" data-field="data"></td>
+                    <td><input type="text" value="${turno.giorno}" data-idx="${idx}" data-field="giorno"></td>
+                    <td><input type="text" value="${turno.slot_1}" data-idx="${idx}" data-field="slot_1"></td>
+                    <td><input type="text" value="${turno.slot_2}" data-idx="${idx}" data-field="slot_2"></td>
+                </tr>`;
+                shiftsTableBody.innerHTML += row;
+            });
+        }
+
+        document.getElementById('save-btn').onclick = async () => {
+            const turni = [];
+            const rows = shiftsTableBody.querySelectorAll('tr');
+            rows.forEach(row => {
+                const inputs = row.querySelectorAll('input');
+                turni.push({
+                    data: inputs[0].value,
+                    giorno: inputs[1].value,
+                    slot_1: inputs[2].value,
+                    slot_2: inputs[3].value
+                });
+            });
+
+            const res = await fetch('/api/shifts/commit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ turni })
+            });
+
+            if (res.ok) {
+                alert("Dati salvati con successo su Google Sheets!");
+                location.reload();
+            }
+        };
+
+        document.getElementById('cancel-btn').onclick = () => location.reload();
+
+        function reset() {
+            uploadBtn.disabled = false;
+            statusOverlay.style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

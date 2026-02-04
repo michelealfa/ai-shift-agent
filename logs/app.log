@@ -1,0 +1,117 @@
+2026-02-03 16:02:21,003 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:02:21,004 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:02:24,309 - shift_agent - INFO - File uploaded: temp/uploads/3ad98c97-b69f-4166-b181-2e03cab483a3.jpg for user CARLO
+2026-02-03 16:02:49,392 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:02:49,546 - shift_agent - INFO - Successfully committed 7 rows to Google Sheets for user CARLO.
+2026-02-03 16:02:50,857 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:02:50,859 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:02:50,988 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:02:56,466 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=GPS&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:02:57,431 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:04:31,008 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:04:31,008 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:04:31,013 - root - INFO - AFC is enabled with max remote calls: 10.
+2026-02-03 16:04:36,340 - root - INFO - AFC remote call 1 is done.
+2026-02-03 16:05:08,759 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:05:08,759 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:05:08,765 - root - INFO - AFC is enabled with max remote calls: 10.
+2026-02-03 16:05:13,144 - root - INFO - AFC remote call 1 is done.
+2026-02-03 16:05:21,387 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=GPS&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:05:21,907 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:05:35,337 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:05:35,337 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:05:35,460 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:05:53,689 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=GPS&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:05:54,608 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:05:55,503 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Altro&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:05:56,149 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:11:29,918 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:11:29,921 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:11:30,126 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:11:40,610 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.48348848599967,9.206345470829426&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:11:44,023 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:11:44,707 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.48348848599967,9.206345470829426&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:11:45,552 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Altro&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:11:46,594 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.48348848599967,9.206345470829426&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:11:47,319 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:11:48,095 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.48348848599967,9.206345470829426&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:11:48,853 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Altro&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:11:54,224 - shift_agent - INFO - File uploaded: temp/uploads/a4fbf2e6-0dae-4b21-820a-b1d8d992922d.jpg for user CARLO
+2026-02-03 16:12:14,626 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:12:14,766 - shift_agent - INFO - Successfully committed 7 rows to Google Sheets for user CARLO.
+2026-02-03 16:12:15,104 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:12:15,105 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:12:15,203 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:12:35,204 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.483493538928094,9.206346246970895&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:12:36,965 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:12:58,284 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.483493538928094,9.206346246970895&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:12:58,865 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Altro&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:12:59,380 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:13:04,302 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.483493538928094,9.206346246970895&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:13:05,140 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:13:06,257 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:13:06,856 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Altro&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:13:07,597 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:13:08,381 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.483492025301985,9.206350610620113&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:13:19,293 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:13:19,294 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:13:19,300 - root - INFO - AFC is enabled with max remote calls: 10.
+2026-02-03 16:13:24,081 - root - INFO - AFC remote call 1 is done.
+2026-02-03 16:14:46,849 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:14:46,850 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:14:50,092 - shift_agent - INFO - File uploaded: temp/uploads/770b095b-63c3-4825-80f3-b81956773e09.jpg for user CARLO
+2026-02-03 16:15:09,828 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:15:09,977 - shift_agent - INFO - Successfully committed 7 rows to Google Sheets for user ALESSANDRA RE.
+2026-02-03 16:15:10,292 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:15:10,293 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:15:10,410 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:15:17,374 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.48350979886814,9.206395830186752&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:15:18,536 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:20:45,044 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:20:45,045 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:20:45,232 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:20:49,753 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.48352630228209,9.206400760842678&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:20:58,754 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Altro&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:20:59,634 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.48352630228209,9.206400760842678&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:21:01,934 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:21:02,766 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.48352630228209,9.206400760842678&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:21:26,400 - shift_agent - INFO - File uploaded: temp/uploads/baeb3b81-71f5-4dff-bae8-a4b3cb1f4507.jpg for user UTENTE
+2026-02-03 16:21:38,535 - celery.backends.redis - ERROR - Connection to Redis lost: Retry (0/20) now.
+2026-02-03 16:21:42,499 - celery.backends.redis - ERROR - Connection to Redis lost: Retry (1/20) in 1.00 second.
+2026-02-03 16:21:47,499 - celery.backends.redis - ERROR - Connection to Redis lost: Retry (2/20) in 1.00 second.
+2026-02-03 16:21:52,477 - celery.backends.redis - ERROR - Connection to Redis lost: Retry (3/20) in 1.00 second.
+2026-02-03 16:21:57,473 - celery.backends.redis - ERROR - Connection to Redis lost: Retry (4/20) in 1.00 second.
+2026-02-03 16:22:02,472 - celery.backends.redis - ERROR - Connection to Redis lost: Retry (5/20) in 1.00 second.
+2026-02-03 16:22:07,476 - celery.backends.redis - ERROR - Connection to Redis lost: Retry (6/20) in 1.00 second.
+2026-02-03 16:22:12,478 - celery.backends.redis - ERROR - Connection to Redis lost: Retry (7/20) in 1.00 second.
+2026-02-03 16:22:17,460 - celery.backends.redis - ERROR - Connection to Redis lost: Retry (8/20) in 1.00 second.
+2026-02-03 16:22:22,443 - celery.backends.redis - ERROR - Connection to Redis lost: Retry (9/20) in 1.00 second.
+2026-02-03 16:22:27,434 - celery.backends.redis - ERROR - Connection to Redis lost: Retry (10/20) in 1.00 second.
+2026-02-03 16:22:38,608 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:22:38,609 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:22:38,770 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:22:59,387 - shift_agent - INFO - File uploaded: temp/uploads/567440bf-70b9-4c9c-bfb1-14a309eb73ae.jpg for user UTENTE
+2026-02-03 16:23:13,253 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:23:13,613 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:23:13,613 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:23:13,727 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:23:20,109 - shift_agent - INFO - File uploaded: temp/uploads/4f5c9cdd-9001-40fb-b9d1-6286871d83d1.jpg for user UTENTE
+2026-02-03 16:24:56,954 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:24:56,955 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:24:57,107 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:24:59,988 - shift_agent - INFO - File uploaded: temp/uploads/a6262c2d-3314-4d7e-ae16-8c355f51bf95.jpg for user UTENTE
+2026-02-03 16:29:05,832 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:29:05,835 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:29:05,991 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:29:05,992 - shift_agent - ERROR - Maps API Error Response: {'destination_addresses': [], 'error_message': 'The provided API key is invalid. ', 'origin_addresses': [], 'rows': [], 'status': 'REQUEST_DENIED'}
+2026-02-03 16:29:14,573 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.483529747685786,9.206393893839426&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:29:14,574 - shift_agent - ERROR - Maps API Error Response: {'destination_addresses': [], 'error_message': 'The provided API key is invalid. ', 'origin_addresses': [], 'rows': [], 'status': 'REQUEST_DENIED'}
+2026-02-03 16:42:55,215 - src.storage.sheets_client - WARNING - Credentials file not found at config/service_account.json. Google Sheets service will not be available. Using local fallback.
+2026-02-03 16:42:55,222 - src.storage.sheets_client - INFO - Service unavailable, fetching from local backup.
+2026-02-03 16:42:55,463 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:42:55,465 - shift_agent - ERROR - Maps API Error Response: {'destination_addresses': [], 'error_message': 'The provided API key is invalid. ', 'origin_addresses': [], 'rows': [], 'status': 'REQUEST_DENIED'}
+2026-02-03 16:43:00,636 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=45.48351760540316,9.206386534300842&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:43:00,638 - shift_agent - ERROR - Maps API Error Response: {'destination_addresses': [], 'error_message': 'The provided API key is invalid. ', 'origin_addresses': [], 'rows': [], 'status': 'REQUEST_DENIED'}
+2026-02-03 16:43:01,816 - httpx - INFO - HTTP Request: GET https://maps.googleapis.com/maps/api/distancematrix/json?origins=Origgio&destinations=Il+Centro+Arese&departure_time=now&key=your_google_maps_api_key_here "HTTP/1.1 200 OK"
+2026-02-03 16:43:01,817 - shift_agent - ERROR - Maps API Error Response: {'destination_addresses': [], 'error_message': 'The provided API key is invalid. ', 'origin_addresses': [], 'rows': [], 'status': 'REQUEST_DENIED'}
+2026-02-03 16:43:11,521 - shift_agent - INFO - File uploaded: temp/uploads/67cc799b-b242-48a5-a2d8-de98512539f5.jpg for user UTENTE
