@@ -2,6 +2,7 @@ import os
 import asyncio
 import json
 import logging
+import gc
 from celery import Celery
 from telegram import Bot
 from ..config.config import settings
@@ -100,9 +101,10 @@ async def process_image_logic(image_path: str, chat_id: int, target_user: str, w
             await bot.send_message(chat_id=chat_id, text=f"⚠️ Errore durante l'elaborazione Gemini: {str(e)}")
         return {"error": str(e)}
     finally:
-        # Cleanup file temporaneo
+        # Cleanup file temporaneo e memoria
         if os.path.exists(image_path):
             try:
                 os.remove(image_path)
             except:
                 pass
+        gc.collect() # Libera memoria immediatamente

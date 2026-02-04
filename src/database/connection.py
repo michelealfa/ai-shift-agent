@@ -39,15 +39,15 @@ class DatabaseManager:
             if database_url.startswith("postgres://"):
                 database_url = database_url.replace("postgres://", "postgresql://", 1)
             
-            # Create engine with connection pooling
+            # Create engine with connection pooling optimized for low memory (512MB)
             self.engine = create_engine(
                 database_url,
                 poolclass=QueuePool,
-                pool_size=10,
-                max_overflow=20,
-                pool_pre_ping=True,  # Verify connections before using
-                pool_recycle=3600,   # Recycle connections after 1 hour
-                echo=False,          # Set to True for SQL debugging
+                pool_size=3,         # Reduced from 10
+                max_overflow=2,      # Reduced from 20
+                pool_pre_ping=True,
+                pool_recycle=1800,   # More frequent recycle
+                echo=False,
             )
             
             # Create session factory
