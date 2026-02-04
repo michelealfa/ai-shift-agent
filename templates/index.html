@@ -878,7 +878,7 @@
         <button class="btn btn-success" style="margin-top: 1.5rem;" id="submit-review">Conferma e Salva</button>
     </div>
 
-    <input type="file" id="file-input" accept="image/*" capture="camera" class="hidden">
+    <input type="file" id="file-input" accept="image/*" class="hidden">
     <div id="status-bar" class="hidden"><span class="loader"></span><span id="status-message">...</span></div>
 
     <script>
@@ -1084,7 +1084,7 @@
             // Calculate range: Monday of Previous Week to Sunday of Next Week (3 Weeks)
             const now = new Date();
             const dayOfWeek = now.getDay() || 7;
-            
+
             const startOfRange = new Date(now);
             startOfRange.setDate(now.getDate() - dayOfWeek + 1 - 7); // Monday of LAST week
             startOfRange.setHours(0, 0, 0, 0);
@@ -1107,16 +1107,16 @@
             // Current Week range for highlighting
             const currentWeekStart = new Date(now);
             currentWeekStart.setDate(now.getDate() - dayOfWeek + 1);
-            currentWeekStart.setHours(0,0,0,0);
+            currentWeekStart.setHours(0, 0, 0, 0);
             const currentWeekEnd = new Date(currentWeekStart);
             currentWeekEnd.setDate(currentWeekStart.getDate() + 6);
-            currentWeekEnd.setHours(23,59,59,999);
+            currentWeekEnd.setHours(23, 59, 59, 999);
 
             carousel.innerHTML = filtered.map((t, i) => {
                 const isToday = t.data === today || t.is_today === true;
                 const d = new Date(t.data);
                 const isCurrentWeek = d >= currentWeekStart && d <= currentWeekEnd;
-                
+
                 return `
                 <div class="shift-card fade-in ${isToday ? 'current-day' : ''} ${isCurrentWeek ? 'active-week' : ''}" style="animation-delay: ${i * 0.05}s">
                     <span class="edit-icon" onclick="openEdit(${turni.indexOf(t)})">✏️</span>
