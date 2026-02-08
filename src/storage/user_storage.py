@@ -98,7 +98,6 @@ def add_user(user_data: Dict) -> bool:
                 display_name=user_data.get('display_name'),
                 api_key=api_key,
                 avatar_url=user_data.get('avatar_url') or user_data.get('avatar'),
-                spreadsheet_id=user_data.get('spreadsheet_id'),
                 gemini_api_key=user_data.get('gemini_api_key'),
                 google_maps_api_key=user_data.get('google_maps_api_key'),
                 is_active=user_data.get('is_active', True),
@@ -142,8 +141,6 @@ def update_user(user_id: int, user_data: Dict) -> bool:
                 user.display_name = user_data['display_name']
             if 'avatar_url' in user_data or 'avatar' in user_data:
                 user.avatar_url = user_data.get('avatar_url') or user_data.get('avatar')
-            if 'spreadsheet_id' in user_data:
-                user.spreadsheet_id = user_data['spreadsheet_id']
             if 'gemini_api_key' in user_data:
                 user.gemini_api_key = user_data['gemini_api_key']
             if 'google_maps_api_key' in user_data:

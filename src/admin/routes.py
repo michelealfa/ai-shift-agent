@@ -33,7 +33,6 @@ async def admin_dashboard(request: Request):
             "VISION_MODEL": settings_storage.get_setting("VISION_MODEL"),
             "NLP_MODEL": settings_storage.get_setting("NLP_MODEL"),
             "GOOGLE_MAPS_API_KEY": settings_storage.get_setting("GOOGLE_MAPS_API_KEY"),
-            "SPREADSHEET_ID": settings_storage.get_setting("SPREADSHEET_ID"),
         }
         
         # 3. Get prompts from database
@@ -82,8 +81,7 @@ async def update_env(
     gemini_api_key: str = Form(...),
     vision_model: str = Form(...),
     nlp_model: str = Form(...),
-    google_maps_key: str = Form(...),
-    spreadsheet_id: str = Form(...)
+    google_maps_key: str = Form(...)
 ):
     """Update global system settings in database"""
     settings_storage.set_setting("TARGET_USER_NAME", target_user)
@@ -91,7 +89,6 @@ async def update_env(
     settings_storage.set_setting("VISION_MODEL", vision_model)
     settings_storage.set_setting("NLP_MODEL", nlp_model)
     settings_storage.set_setting("GOOGLE_MAPS_API_KEY", google_maps_key)
-    settings_storage.set_setting("SPREADSHEET_ID", spreadsheet_id)
     
     return RedirectResponse(url="/admin", status_code=303)
 
@@ -99,21 +96,15 @@ async def update_env(
 async def add_user(
     name: str = Form(...),
     display_name: str = Form(...),
-    api_key: str = Form(...),
-    avatar: str = Form(...),
-    gemini_api_key: str = Form(None),
-    spreadsheet_id: str = Form(None),
-    google_maps_api_key: str = Form(None)
+    email: str = Form(...),
+    avatar: str = Form(...)
 ):
     """Add new user to database"""
     user_data = {
         "name": name.upper(),
         "display_name": display_name,
-        "api_key": api_key,
-        "avatar": avatar,
-        "gemini_api_key": gemini_api_key,
-        "spreadsheet_id": spreadsheet_id,
-        "google_maps_api_key": google_maps_api_key
+        "email": email,
+        "avatar": avatar
     }
     storage_add_user(user_data)
     return RedirectResponse(url="/admin", status_code=303)

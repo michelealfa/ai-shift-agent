@@ -1,0 +1,278 @@
+# Product Requirements Document (PRD)
+
+## Progetto: **AI Shift Agent**
+
+Versione: **2.0**
+Stato: **Refactor strutturale + MVP solido**
+Target: **Esecuzione da parte di agenti software / team tecnico**
+
+---
+
+## 1. Visione e Obiettivo del Prodotto
+
+AI Shift Agent è un **assistente intelligente personale** per utenti con turni di lavoro variabili, progettato per:
+
+* comprendere turni di lavoro (OCR + input manuale)
+* ragionare sugli orari
+* valutare l’impatto del traffico
+* suggerire azioni concrete per arrivare puntuali
+
+Il sistema evolve da **MVP single-user** a **SaaS multi-tenant**, mantenendo il backend **API-first e agent-oriented**.
+
+---
+
+## 2. Scope del Refactor (Decisioni Chiave)
+
+### 2.1 Funzionalità RIMOSSE
+
+Le seguenti componenti **devono essere eliminate** dal codicebase:
+
+* Integrazione Google Sheets
+* Bot Telegram
+* Pipeline e client Ollama
+
+> Motivazione: riduzione del debito tecnico, eliminazione di side-effect esterni, focus sul core domain.
+
+---
+
+## 3. Architettura Target
+
+### 3.1 Stack Tecnologico
+
+* **Backend**: FastAPI (Python 3.11+)
+* **DB**: PostgreSQL 16
+* **Cache / Broker**: Redis
+* **Async Jobs**: Celery
+* **AI Provider**: Google Gemini (Vision + NLP)
+
+---
+
+### 3.2 Principi Architetturali
+
+* API-first
+* Determinismo (no fallback silenziosi)
+* Single Source of Truth
+* Agent + Tool architecture
+* Multi-tenant ready
+
+---
+
+## 4. Modellazione del Dominio (Core Domain)
+
+### 4.1 Entità Principali
+
+#### User
+
+* id
+* email
+* hashed_password (o external_id)
+* tier (free / pro / team)
+* created_at
+
+#### APIKey
+
+* id
+* user_id
+* key_hash
+* is_active
+* quota_limit
+* created_at
+
+#### Shift
+
+* id
+* user_id
+* date
+* start_time
+* end_time
+* source (OCR | manual)
+* version
+
+#### ShiftVersion
+
+* id
+* shift_id
+* payload
+* created_at
+* reason
+
+#### Location
+
+* id
+* user_id
+* label (home, work, etc)
+* lat
+* lng
+
+#### CommuteProfile
+
+* id
+* user_id
+* origin_location_id
+* destination_location_id
+* transport_type
+
+#### TrafficSnapshot
+
+* id
+* commute_profile_id
+* shift_id
+* departure_time
+* travel_time_minutes
+* confidence
+* created_at
+
+#### ConfigVersion
+
+* id
+* scope (vision | nlp | traffic)
+* version
+* payload (JSON)
+* is_active
+* created_at
+
+#### AgentRun
+
+* id
+* user_id
+* input
+* output
+* reasoning
+* created_at
+
+---
+
+## 5. Configurazione (Single Source of Truth)
+
+### 5.1 Config di Sistema (.env)
+
+* DB_URL
+* REDIS_URL
+* SECRET_KEY
+* GEMINI_API_KEY
+
+### 5.2 Config di Prodotto (DB)
+
+Gestita tramite `ConfigVersion`:
+
+* Prompt OCR
+* Prompt NLP
+* Soglie traffico
+* Policy decisionali agente
+
+Ogni modifica crea una nuova versione.
+
+---
+
+## 6. Agente AI
+
+### 6.1 Ruolo dell’Agente
+
+L’agente è responsabile di:
+
+* interpretare input utente
+* invocare tool
+* combinare dati (shift + traffico)
+* produrre risposte spiegabili
+
+### 6.2 Tool Disponibili
+
+#### shift_query_tool
+
+* Recupera turni per data/intervallo
+
+#### traffic_query_tool
+
+* Calcola tempo di percorrenza dato:
+
+  * origin
+  * destination
+  * departure_time
+
+#### suggestion_tool
+
+* Produce suggerimenti basati su regole + output AI
+
+---
+
+## 7. Feature: Gestione Turni
+
+### Requisiti
+
+* Inserimento manuale turni
+* OCR come input opzionale
+* Versionamento automatico
+* Validazione utente
+
+---
+
+## 8. Feature: Traffico (Core Value)
+
+### 8.1 Query On-Demand
+
+* API: `GET /traffic/estimate`
+* Invocabile dall’agente
+
+### 8.2 Sistema Attivo (Async)
+
+#### Logica
+
+* Job schedulato pre-turno
+* Calcolo traffico
+* Valutazione rischio
+
+#### Output
+
+* Suggestion record
+* (Future) Notification event
+
+---
+
+## 9. Sicurezza
+
+* Nessuna API key statica
+* API key hashate
+* Rate limit per user/tier
+* Fail-fast su errori critici
+
+---
+
+## 10. Observability
+
+* Log strutturati
+* Tracciamento AgentRun
+* Tracciamento tool invocation
+
+---
+
+## 11. Roadmap
+
+### Fase 1 – Refactor Core
+
+* Rimozione integrazioni
+* Nuovo schema DB
+* API key per utente
+
+### Fase 2 – MVP Solido
+
+* Agente + tool
+* Traffico on-demand
+* UI minimale
+
+### Fase 3 – SaaS Ready
+
+* Multi-tenant
+* Tier & quota
+* Sistema attivo + notifiche
+
+---
+
+## 12. Non-Goals
+
+* Nessuna integrazione esterna non core
+* Nessuna UI complessa
+* Nessun supporto multi-lingua iniziale
+
+---
+
+**Documento progettato per essere eseguito e seguito da agenti software e team tecnici.**

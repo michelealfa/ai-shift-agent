@@ -7,26 +7,13 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 DYNAMIC_SETTINGS_PATH = "config/dynamic_settings.json"
 
 class Settings(BaseSettings):
-    # Telegram
-    TELEGRAM_BOT_TOKEN: str = ""
-    TELEGRAM_WEBHOOK_URL: str = ""
-    TELEGRAM_ALLOWED_USERS_JSON: str = "[]"
-
-    @property
-    def TELEGRAM_ALLOWED_USERS(self) -> List[int]:
-        try:
-            return json.loads(self.TELEGRAM_ALLOWED_USERS_JSON)
-        except:
-            return []
-
+    # Core
+    SECRET_KEY: str = "your-secret-key-here"
+    
     # Gemini AI
     GEMINI_API_KEY: str = ""
     VISION_MODEL: str = "gemini-2.0-flash"
     NLP_MODEL: str = "gemini-2.0-flash"
-
-    # Google Sheets
-    GOOGLE_SHEETS_CREDENTIALS_PATH: str = "config/service_account.json"
-    SPREADSHEET_ID: str = ""
 
     # Redis/Celery
     REDIS_URL: str = "redis://redis:6379/0"
@@ -36,7 +23,8 @@ class Settings(BaseSettings):
     DATABASE_URL: str = ""
 
     # Security
-    X_API_KEY: str = "default_unsafe_key"
+    # In v2.0 we move to per-user API keys, but we might keep this for admin/internal use
+    INTERNAL_API_KEY: str = "default_unsafe_key"
     
     # Traffic/Maps
     GOOGLE_MAPS_API_KEY: str = ""

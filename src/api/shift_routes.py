@@ -4,16 +4,15 @@ import os
 import uuid
 import json
 import httpx
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from ..tasks.worker import process_shift_image_task
 from ..utils.logger import logger
-from ..storage.sheets_client import SheetsClient
 from ..config.config import settings
 from ..ai.gemini_client import GeminiClient
+from .auth import get_current_user
+from ..database.models import User
 
 router = APIRouter(prefix="/api/shifts", tags=["shifts"])
-
-from ..storage.user_storage import get_user_by_key
 
 # Ensure upload directory exists with absolute path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -21,25 +20,13 @@ UPLOAD_DIR = os.path.join(BASE_DIR, "temp", "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # Security Dependency - Dynamic User Mapping
-async def verify_api_key(x_api_key: str = Header(None, alias="X-API-KEY")):
-    # 1. Check user storage
-    matching_user = get_user_by_key(x_api_key)
-    if matching_user:
-        return matching_user
-    
-    # 2. Fallback to settings.X_API_KEY for legacy support
-    if x_api_key and x_api_key == settings.X_API_KEY:
-        return {"name": settings.TARGET_USER_NAME}
-        
-    raise HTTPException(status_code=403, detail="Invalid API Key")
-
 @router.post("/upload")
 async def upload_shift_image(
     file: UploadFile = File(...),
-    user_data: dict = Depends(verify_api_key)
+    user: User = Depends(get_current_user)
 ):
     """Uploads an image and triggers the AI processing task."""
-    target_user = user_data.get("name", "UTENTE")
+    target_user = user.display_name
     file_extension = os.path.splitext(file.filename)[1]
     file_id = str(uuid.uuid4())
     file_path = os.path.join(UPLOAD_DIR, f"{file_id}{file_extension}")
@@ -54,8 +41,7 @@ async def upload_shift_image(
         
         # Trigger Celery Task with user settings
         user_settings = {
-            "gemini_api_key": user_data.get("gemini_api_key"),
-            "spreadsheet_id": user_data.get("spreadsheet_id")
+            "gemini_api_key": getattr(user, "gemini_api_key", settings.GEMINI_API_KEY)
         }
         task = process_shift_image_task.delay(file_path, None, None, target_user, True, user_settings)
         
@@ -69,7 +55,7 @@ async def upload_shift_image(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/status/{task_id}")
-async def get_task_status(task_id: str, user_data: dict = Depends(verify_api_key)):
+async def get_task_status(task_id: str, user: User = Depends(get_current_user)):
     """Checks the status of the AI processing task."""
     task_result = AsyncResult(task_id)
     
@@ -86,26 +72,18 @@ async def get_task_status(task_id: str, user_data: dict = Depends(verify_api_key
     return response
 
 @router.post("/commit")
-async def commit_shifts(data: dict, user_data: dict = Depends(verify_api_key)):
-    """Saves the validated shift data to database and syncs to Google Sheets."""
+async def commit_shifts(data: dict, user: User = Depends(get_current_user)):
+    """Saves the validated shift data to database."""
     from ..storage.shift_storage import shift_storage
-    from datetime import datetime
     
     turni = data.get('turni', [])
     
-    logger.info(f"Commit request received: {len(turni)} shifts from user {user_data.get('name')}")
+    logger.info(f"Commit request received: {len(turni)} shifts from user {user.display_name}")
 
     if not turni:
         raise HTTPException(status_code=400, detail="No 'turni' data provided.")
 
     try:
-        user_id = int(user_data.get("id", 0))
-        if not user_id:
-            raise HTTPException(status_code=400, detail="User ID not found")
-        
-        target_user = user_data.get("name", "UTENTE")
-        logger.info(f"Processing commit for user_id={user_id}, name={target_user}")
-        
         # Prepare shift data for bulk save
         shifts_data = []
         for t in turni:
@@ -116,22 +94,19 @@ async def commit_shifts(data: dict, user_data: dict = Depends(verify_api_key)):
                 'notes': t.get('notes', '')
             }
             shifts_data.append(shift_entry)
-            logger.debug(f"Prepared shift: {shift_entry}")
         
-        # Save to database (will also sync to Sheets)
-        logger.info(f"Calling bulk_save_shifts with {len(shifts_data)} shifts")
+        # Save to database
         saved_shifts = shift_storage.bulk_save_shifts(
-            user_id=user_id,
+            user_id=user.id,
             shifts_data=shifts_data,
-            source='ocr',
-            sync_to_sheets=True
+            source='ocr'
         )
         
-        logger.info(f"✅ Successfully committed {len(saved_shifts)} shifts for user {target_user} (user_id={user_id})")
+        logger.info(f"✅ Successfully committed {len(saved_shifts)} shifts for user {user.display_name}")
         return {
             "status": "success", 
             "saved_count": len(saved_shifts),
-            "message": f"Saved {len(saved_shifts)} shifts to database and Google Sheets"
+            "message": f"Saved {len(saved_shifts)} shifts to database"
         }
     except Exception as e:
         logger.error(f"❌ Error committing shifts: {e}", exc_info=True)
@@ -145,22 +120,11 @@ async def list_shifts(user_data: dict = Depends(verify_api_key)):
         from ..storage.shift_storage import shift_storage
         from datetime import date, timedelta
         
-        user_id = int(user_data.get("id", 0))
-        if not user_id:
-            raise HTTPException(status_code=400, detail="User ID not found")
-        
-        # Try to get shifts from database first
-        all_shifts = shift_storage.get_user_shifts(user_id)
-        
-        # If no shifts in DB, try syncing from Google Sheets
-        if not all_shifts:
-            logger.info(f"No shifts in DB for user {user_id}, syncing from Sheets...")
-            synced_count = shift_storage.sync_from_sheets(user_id)
-            if synced_count > 0:
-                all_shifts = shift_storage.get_user_shifts(user_id)
+        # Get shifts from database
+        all_shifts = shift_storage.get_user_shifts(user.id)
         
         # Get current week shifts for initial display
-        current_week_shifts = shift_storage.get_current_week_shifts(user_id)
+        current_week_shifts = shift_storage.get_current_week_shifts(user.id)
         
         # Convert to API format
         def shift_to_dict(shift):
@@ -206,22 +170,17 @@ async def update_shift(data: dict, user_data: dict = Depends(verify_api_key)):
         raise HTTPException(status_code=400, detail="Missing shift data")
     
     try:
-        user_id = int(user_data.get("id", 0))
-        if not user_id:
-            raise HTTPException(status_code=400, detail="User ID not found")
-        
         # Parse date
         shift_date = datetime.strptime(turno.get('data'), '%Y-%m-%d').date()
         
-        # Save shift (will update if exists)
+        # Save shift
         shift = shift_storage.save_shift(
-            user_id=user_id,
+            user_id=user.id,
             shift_date=shift_date,
             slot_1=turno.get('slot_1'),
             slot_2=turno.get('slot_2'),
             notes=turno.get('notes'),
-            source='manual',
-            sync_to_sheets=True
+            source='manual'
         )
         
         return {
@@ -248,10 +207,8 @@ async def get_traffic(origin: str = "Origgio", user_data: dict = Depends(verify_
         resolved_origin = "Milan"
         
     try:
-        from ..storage.settings_storage import settings_storage
-        # 1. Try Google Maps if key exists (user-specific or global)
-        user_id = int(user_data.get("id", 0))
-        maps_key = settings_storage.get_google_maps_api_key(user_id)
+        # 1. Try Google Maps if key exists
+        maps_key = settings.GOOGLE_MAPS_API_KEY
         
         if maps_key:
             # Added arrival_time or departure_time=now + traffic_model=best_guess for accurate traffic data
@@ -322,12 +279,11 @@ async def query_ai(data: dict, user_data: dict = Depends(verify_api_key)):
     
     try:
         from ..storage.shift_storage import shift_storage
-        gemini = GeminiClient(api_key=user_data.get("gemini_api_key"))
-        user_id = int(user_data.get("id", 0))
-        target_user = user_data.get("display_name", user_data.get("name", "UTENTE"))
+        gemini = GeminiClient(api_key=settings.GEMINI_API_KEY)
+        target_user = user.display_name
         
-        # Get user's shifts from database
-        all_shifts = shift_storage.get_user_shifts(user_id)
+        # Get user's shifts
+        all_shifts = shift_storage.get_user_shifts(user.id)
         
         # Format shifts for context
         shifts_context_list = []

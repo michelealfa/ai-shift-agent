@@ -5,7 +5,6 @@ from fastapi.staticfiles import StaticFiles
 import os
 import logging
 
-from .bot.handlers import handle_webhook
 from .admin.routes import router as admin_router
 from .api.shift_routes import router as shift_router
 from .api.user_routes import router as user_router
@@ -95,10 +94,4 @@ async def health_check():
         "database": "healthy" if db_healthy else "unhealthy",
         "cache": "healthy" if cache_healthy else "unhealthy"
     }
-
-@app.post("/webhook")
-async def telegram_webhook(request: Request):
-    data = await request.json()
-    await handle_webhook(data)
-    return {"status": "ok"}
 
